@@ -202,3 +202,26 @@ What rows will INNER JOIN return?
 What rows will LEFT JOIN return?
 
 Try answering these before we move to NULL, NOT NULL, UNIQUE, DEFAULT constraints, which are usually asked before advanced topics like subqueries and normalization. 🚀
+create table Orders(
+    order_id int primary key,
+    customer_id int,
+    amount decimal(10,2),
+    foreign key (customer_id)
+    references Customers(customer_id)
+);
+INSERT INTO Orders (order_id, customer_id, amount) VALUES 
+(101, 1, 250.50),  -- Nanda's first order
+(102, 2, 99.99),   -- Ravi's order
+(103, 1, 45.00);
+select Customers.customer_name,Orders.amount
+from Orders
+right join Customers
+on Customers.customer_id=Orders.customer_id;
+create table Customers (
+    customer_id int primary key,
+    customer_name varchar(50)
+);
+INSERT INTO Customers (customer_id, customer_name) VALUES 
+(1, 'Nanda'),
+(2, 'Ravi'),
+(3, 'Sai');
