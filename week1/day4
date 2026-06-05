@@ -1,1 +1,204 @@
 
+Perfect 👍
+
+Now we reach the most important SQL topic for interviews and real projects:
+
+JOINS
+
+A JOIN combines data from multiple tables.
+
+Why Do We Need JOINS?
+
+Suppose we have two tables.
+
+Students
+student_id	name
+1	Nanda
+2	Ravi
+3	Sai
+Enrollments
+enroll_id	student_id	course
+101	1	SQL
+102	2	Java
+103	1	Python
+
+Question:
+
+Which student enrolled in which course?
+
+The answer is spread across TWO tables.
+
+We need a JOIN.
+
+INNER JOIN
+
+The most commonly used JOIN.
+
+Returns only matching rows from both tables.
+
+Syntax
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
+Example
+SELECT Students.name, Enrollments.course
+FROM Students
+INNER JOIN Enrollments
+ON Students.student_id = Enrollments.student_id;
+Step-by-Step Matching
+Students.student_id
+         =
+Enrollments.student_id
+Visual
+Students                Enrollments
+
+1 Nanda            ↔     1 SQL
+2 Ravi             ↔     2 Java
+3 Sai              ↔     No Match
+Output
+name	course
+Nanda	SQL
+Ravi	Java
+Nanda	Python
+
+Notice:
+
+Sai is not shown because there is no enrollment record.
+
+LEFT JOIN
+
+Returns:
+
+All rows from LEFT table
+Matching rows from RIGHT table
+Syntax
+SELECT *
+FROM Students
+LEFT JOIN Enrollments
+ON Students.student_id = Enrollments.student_id;
+Visual
+Students                Enrollments
+
+1 Nanda            ↔     1 SQL
+2 Ravi             ↔     2 Java
+3 Sai              ↔     No Match
+Output
+name	course
+Nanda	SQL
+Ravi	Java
+Sai	NULL
+Important
+
+LEFT JOIN keeps all rows from the left table.
+
+RIGHT JOIN
+
+Returns:
+
+All rows from RIGHT table
+Matching rows from LEFT table
+
+Suppose Enrollments contains:
+
+enroll_id	student_id	course
+101	1	SQL
+102	2	Java
+103	5	Python
+
+Notice:
+
+student_id = 5 doesn't exist in Students.
+
+SELECT *
+FROM Students
+RIGHT JOIN Enrollments
+ON Students.student_id = Enrollments.student_id;
+Output
+name	course
+Nanda	SQL
+Ravi	Java
+NULL	Python
+Quick Comparison
+INNER JOIN
+   ↓
+Only Matches
+
+LEFT JOIN
+   ↓
+All Left + Matches
+
+RIGHT JOIN
+   ↓
+All Right + Matches
+Interview Trick
+
+Most interviewers ask:
+
+Difference between INNER JOIN and LEFT JOIN?
+
+INNER JOIN
+
+Returns only matching records.
+
+LEFT JOIN
+
+Returns all records from left table and matching records from right table.
+
+Visual Summary
+Students
+   ⟷
+Enrollments
+
+INNER JOIN
+  → only common rows
+
+LEFT JOIN
+  → all students
+
+RIGHT JOIN
+  → all enrollments
+Real Project Example (Event Planner App)
+
+You are building:
+
+Users Table
+user_id	name
+1	Nanda
+2	Ravi
+Events Table
+event_id	user_id	title
+101	1	Tech Fest
+102	2	Workshop
+
+To display:
+
+Nanda → Tech Fest
+Ravi  → Workshop
+
+you would use:
+
+SELECT Users.name, Events.title
+FROM Users
+INNER JOIN Events
+ON Users.user_id = Events.user_id;
+Practice
+
+Create these tables mentally:
+
+Customers
+customer_id	customer_name
+1	Nanda
+2	Ravi
+3	Sai
+Orders
+order_id	customer_id
+101	1
+102	2
+
+Now answer:
+
+What rows will INNER JOIN return?
+What rows will LEFT JOIN return?
+
+Try answering these before we move to NULL, NOT NULL, UNIQUE, DEFAULT constraints, which are usually asked before advanced topics like subqueries and normalization. 🚀
