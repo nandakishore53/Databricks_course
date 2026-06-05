@@ -1,1 +1,135 @@
+Constraints
 
+Constraints are rules applied to columns.
+
+They help maintain data integrity.
+
+Why Constraints?
+
+Without constraints, someone could insert:
+
+student_id	name
+NULL	Nanda
+1	Ravi
+1	Sai
+
+Problems:
+
+NULL IDs
+Duplicate IDs
+
+Constraints prevent this.
+
+1. NOT NULL
+
+Ensures a column cannot have NULL values.
+
+Example
+CREATE TABLE Students (
+    student_id INT,
+    name VARCHAR(50) NOT NULL
+);
+Allowed
+INSERT INTO Students
+VALUES (1, 'Nanda');
+Not Allowed
+INSERT INTO Students
+VALUES (2, NULL);
+
+❌ Error because name cannot be NULL.
+
+2. UNIQUE
+
+Ensures all values in a column are different.
+
+Example
+CREATE TABLE Users (
+    user_id INT,
+    email VARCHAR(100) UNIQUE
+);
+Allowed
+nanda@gmail.com
+ravi@gmail.com
+Not Allowed
+nanda@gmail.com
+nanda@gmail.com
+
+❌ Duplicate value.
+
+Difference Between PRIMARY KEY and UNIQUE
+PRIMARY KEY	UNIQUE
+Cannot be NULL	Can contain NULL (DB dependent)
+Only one per table	Multiple allowed
+Always unique	Also unique
+3. DEFAULT
+
+Assigns a value automatically if none is provided.
+
+Example
+CREATE TABLE Employee (
+    emp_id INT,
+    salary INT DEFAULT 30000
+);
+Insert
+INSERT INTO Employee(emp_id)
+VALUES (1);
+Result
+emp_id	salary
+1	30000
+
+Because SQL automatically used the default value.
+
+4. CHECK
+
+Ensures values satisfy a condition.
+
+Example
+CREATE TABLE Students (
+    student_id INT,
+    age INT CHECK(age >= 18)
+);
+Allowed
+age = 20
+
+✅
+
+Not Allowed
+age = 15
+
+❌ Violates condition.
+
+Visual Summary
+NOT NULL
+   ↓
+Value required
+
+UNIQUE
+   ↓
+No duplicates
+
+DEFAULT
+   ↓
+Automatic value
+
+CHECK
+   ↓
+Must satisfy condition
+Real Interview Example
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    age INT CHECK(age >= 18),
+    role VARCHAR(20) DEFAULT 'User'
+);
+
+This single table uses almost every important constraint.
+
+Practice
+
+Try creating a table called Products with:
+
+product_id → PRIMARY KEY
+product_name → NOT NULL
+price → CHECK(price > 0)
+category → DEFAULT 'General'
