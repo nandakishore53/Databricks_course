@@ -1,4 +1,134 @@
 
+Perfect 👍
+
+We're going to continue with one advanced topic only, not too much at once.
+
+Window Functions – Part 1
+
+Today we'll learn:
+
+ROW_NUMBER()
+Why normal ORDER BY is not enough
+Basic window function syntax
+What Problem Do Window Functions Solve?
+
+Suppose Employee table:
+
+emp_id	name	salary
+1	John	50000
+2	Jane	60000
+3	Bob	80000
+4	Alice	45000
+
+Question:
+
+Give each employee a rank number based on salary.
+
+Normal ORDER BY only sorts:
+
+SELECT name, salary
+FROM Employee
+ORDER BY salary DESC;
+
+Output:
+
+name	salary
+Bob	80000
+Jane	60000
+John	50000
+Alice	45000
+
+Sorted, but no numbering.
+
+ROW_NUMBER()
+
+ROW_NUMBER() assigns a unique number to each row.
+
+Syntax
+SELECT
+    name,
+    salary,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) AS row_num
+FROM Employee;
+Break It Down
+ROW_NUMBER()
+
+Creates numbers:
+
+1
+2
+3
+4
+OVER()
+
+Tells SQL:
+
+"How should I assign these numbers?"
+
+ORDER BY salary DESC
+
+Number rows according to salary from highest to lowest.
+
+Output
+name	salary	row_num
+Bob	80000	1
+Jane	60000	2
+John	50000	3
+Alice	45000	4
+Visual Understanding
+Salary DESC
+
+80000 → 1
+60000 → 2
+50000 → 3
+45000 → 4
+Important Difference
+ORDER BY
+SELECT *
+FROM Employee
+ORDER BY salary DESC;
+
+Only sorts.
+
+ROW_NUMBER()
+ROW_NUMBER() OVER(ORDER BY salary DESC)
+
+Sorts AND assigns numbers.
+
+Real World Use
+
+Imagine:
+
+Top 10 Employees
+Top 5 Students
+Latest 3 Orders
+
+Window functions help solve these problems.
+
+Practice
+
+Using this table:
+
+name	salary
+John	50000
+Jane	60000
+Bob	80000
+
+What row numbers will SQL assign if we use:
+
+ROW_NUMBER() OVER(ORDER BY salary DESC)
+
+Try answering before we continue.
+
+Next Lesson
+
+We'll learn the difference between:
+
+ROW_NUMBER()
+RANK()
+DENSE_RANK()
+
+This is one of the most commonly asked SQL interview questions. 🚀
 Excellent! 🚀
 
 Today we'll learn the most important interview question about Window Functions:
