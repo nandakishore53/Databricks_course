@@ -1,1 +1,167 @@
 
+Excellent! 🚀
+
+Today we'll learn the most important interview question about Window Functions:
+
+ROW_NUMBER() vs RANK() vs DENSE_RANK()
+
+The difference appears when there are duplicate values.
+
+Example Table
+name	salary
+Bob	80000
+Jane	60000
+John	60000
+Alice	45000
+
+Notice:
+
+Jane = 60000
+John = 60000
+
+Same salary.
+
+1. ROW_NUMBER()
+
+Assigns a unique number to every row.
+
+SELECT
+    name,
+    salary,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) AS row_num
+FROM Employee;
+Output
+name	salary	row_num
+Bob	80000	1
+Jane	60000	2
+John	60000	3
+Alice	45000	4
+Important
+
+Even though Jane and John have the same salary:
+
+Jane → 2
+John → 3
+
+ROW_NUMBER never shares numbers.
+
+2. RANK()
+
+People with the same value get the same rank.
+
+SELECT
+    name,
+    salary,
+    RANK() OVER(ORDER BY salary DESC) AS rank_num
+FROM Employee;
+Output
+name	salary	rank_num
+Bob	80000	1
+Jane	60000	2
+John	60000	2
+Alice	45000	4
+Why 4?
+
+Look carefully:
+
+1
+2
+2
+4
+
+Rank 3 is skipped.
+
+This is the key behavior of RANK().
+
+Visual
+Bob    → 1
+
+Jane   → 2
+John   → 2
+
+Alice  → 4
+3. DENSE_RANK()
+
+Similar to RANK but does NOT skip numbers.
+
+SELECT
+    name,
+    salary,
+    DENSE_RANK() OVER(ORDER BY salary DESC) AS dense_rank_num
+FROM Employee;
+Output
+name	salary	dense_rank_num
+Bob	80000	1
+Jane	60000	2
+John	60000	2
+Alice	45000	3
+Visual
+Bob    → 1
+
+Jane   → 2
+John   → 2
+
+Alice  → 3
+
+No gaps.
+
+Easy Comparison
+ROW_NUMBER()
+1
+2
+3
+4
+
+Every row gets a unique number.
+
+RANK()
+1
+2
+2
+4
+
+Duplicates share rank.
+
+Gap appears.
+
+DENSE_RANK()
+1
+2
+2
+3
+
+Duplicates share rank.
+
+No gap.
+
+Interview Question
+Which function is used to find Top 3 Salaries?
+
+Usually:
+
+DENSE_RANK()
+
+Because duplicate salaries should get the same rank.
+
+Summary
+Function	Duplicate Values	Gap?
+ROW_NUMBER()	No	No
+RANK()	Yes	Yes
+DENSE_RANK()	Yes	No
+Practice
+
+Using:
+
+name	marks
+A	95
+B	90
+C	90
+D	80
+
+What will be the output of:
+
+ROW_NUMBER()
+RANK()
+DENSE_RANK()
+
+Try to calculate it yourself.
