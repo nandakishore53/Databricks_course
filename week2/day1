@@ -1,1 +1,196 @@
 
+Now let's learn Normalization, which is all about designing databases properly.
+
+What is Normalization?
+
+Normalization is the process of organizing data to:
+
+✅ Reduce duplicate data
+✅ Avoid data inconsistency
+✅ Improve database design
+
+Why Do We Need Normalization?
+
+Imagine this table:
+
+student_id	student_name	course1	course2
+1	Nanda	SQL	Java
+2	Ravi	Python	NULL
+
+Problems:
+
+Multiple courses in one row
+Difficult to add more courses
+Wastes space
+
+This is a bad design.
+
+First Normal Form (1NF)
+Rule:
+
+Each cell must contain only ONE value.
+
+❌ Not 1NF
+
+student_id	name	courses
+1	Nanda	SQL, Java
+
+Because one cell contains multiple values.
+
+✅ 1NF
+
+student_id	name	course
+1	Nanda	SQL
+1	Nanda	Java
+
+Now every cell contains only one value.
+
+Second Normal Form (2NF)
+Rule:
+Must already be in 1NF
+Remove partial dependency
+
+Consider:
+
+student_id	course_id	student_name	course_name
+1	101	Nanda	SQL
+2	102	Ravi	Java
+
+Problem:
+
+student_name depends only on student_id
+course_name depends only on course_id
+
+They don't depend on the entire key.
+
+Solution
+
+Split into two tables.
+
+Students
+student_id	student_name
+1	Nanda
+2	Ravi
+Courses
+course_id	course_name
+101	SQL
+102	Java
+Third Normal Form (3NF)
+Rule:
+Must be in 2NF
+Remove transitive dependency
+
+Example:
+
+emp_id	emp_name	dept_id	dept_name
+1	John	10	HR
+2	Jane	20	IT
+
+Problem:
+
+emp_id → dept_id
+dept_id → dept_name
+
+So:
+
+emp_id indirectly determines dept_name
+
+This is called transitive dependency.
+
+Solution
+
+Split tables.
+
+Employees
+emp_id	emp_name	dept_id
+1	John	10
+2	Jane	20
+Departments
+dept_id	dept_name
+10	HR
+20	IT
+Visual Summary
+Unnormalized Data
+        ↓
+1NF
+(Atomic Values)
+        ↓
+2NF
+(Remove Partial Dependency)
+        ↓
+3NF
+(Remove Transitive Dependency)
+Easy Interview Definitions
+1NF
+
+Each column contains atomic (single) values.
+
+2NF
+
+Remove partial dependency.
+
+3NF
+
+Remove transitive dependency.
+
+Real World Example (Event Planner App)
+
+Instead of:
+
+user_id	user_name	event_name	venue_name
+
+Create:
+
+Users
+
+| user_id | user_name |
+
+Events
+
+| event_id | event_name |
+
+Venues
+
+| venue_id | venue_name |
+
+Bookings
+
+| booking_id | user_id | event_id |
+
+This is a normalized design.
+
+Most Asked Interview Question
+What are the advantages of normalization?
+Reduces redundancy
+Avoids anomalies
+Saves storage
+Improves consistency
+Easier maintenance
+Practice
+
+Tell me whether the following table violates:
+
+order_id	customer_name	customer_city
+101	Nanda	Vijayawada
+102	Ravi	Hyderabad
+103	Nanda	Vijayawada
+
+Think:
+
+Is there duplicate data?
+Can it be normalized?
+What we've covered so far
+
+✅ Table Creation
+✅ Insert Data
+✅ Select Queries
+✅ Filtering
+✅ Sorting
+✅ LIKE, IN, BETWEEN
+✅ Aggregate Functions
+✅ GROUP BY, HAVING
+✅ Keys (PK/FK)
+✅ Joins
+✅ Constraints
+✅ Subqueries
+✅ Normalization (1NF, 2NF, 3NF)
