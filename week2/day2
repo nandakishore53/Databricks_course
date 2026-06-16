@@ -1,1 +1,174 @@
 
+Perfect. You've learned the core SQL foundations. Before jumping into very advanced topics, let's learn Views and Indexes because they're practical and frequently used.
+
+1. VIEW
+
+A View is a virtual table based on a SQL query.
+
+Think of it as a saved query.
+
+Why Use a View?
+
+Suppose you often run:
+
+SELECT name, salary
+FROM Employee
+WHERE salary > 50000;
+
+Instead of writing it every time, create a view.
+
+Create a View
+CREATE VIEW HighSalaryEmployees AS
+SELECT name, salary
+FROM Employee
+WHERE salary > 50000;
+Use the View
+SELECT *
+FROM HighSalaryEmployees;
+Visual Understanding
+Employee Table
+      ↓
+Saved Query
+      ↓
+VIEW
+      ↓
+Use like a table
+Advantage
+
+Instead of:
+
+SELECT name, salary
+FROM Employee
+WHERE salary > 50000;
+
+every day, just:
+
+SELECT * FROM HighSalaryEmployees;
+2. INDEX
+
+Now let's learn a very important performance concept.
+
+What is an Index?
+
+An Index helps SQL find data faster.
+
+Think about a textbook.
+
+Without an index:
+
+Page 1
+Page 2
+Page 3
+...
+Page 500
+
+You search page by page.
+
+Slow.
+
+With an index:
+
+Database → SQL ..... Page 320
+JOIN ..... Page 250
+Normalization ..... Page 180
+
+You directly jump to the page.
+
+Fast.
+
+Why Index?
+
+Suppose Employee table has:
+
+10 rows → fast
+100 rows → fast
+1,000,000 rows → slow
+
+Searching becomes expensive.
+
+Create an Index
+CREATE INDEX idx_employee_name
+ON Employee(name);
+Meaning
+idx_employee_name → index name
+Employee          → table
+name              → indexed column
+Example Query
+SELECT *
+FROM Employee
+WHERE name = 'John';
+
+Without index:
+
+Scan every row
+
+With index:
+
+Jump directly to matching records
+Important Rule
+
+Indexes improve:
+
+✅ SELECT
+
+But may slow down:
+
+❌ INSERT
+❌ UPDATE
+❌ DELETE
+
+Because SQL must update the index too.
+
+Quick Comparison
+Feature	View	Index
+Purpose	Save query	Speed up search
+Stores data?	No (virtual)	Stores index structure
+Performance	Convenience	Faster retrieval
+Real Interview Questions
+What is a View?
+
+A virtual table based on a SQL query.
+
+What is an Index?
+
+A database object that improves query performance.
+
+Does an Index make everything faster?
+
+No.
+
+It speeds up reads (SELECT) but can slow writes (INSERT, UPDATE, DELETE).
+
+Practice
+
+Suppose we frequently search employees by email.
+
+What index would you create?
+
+Answer should look like:
+
+CREATE INDEX ...
+ON Employee(...);
+Where We Are Now
+
+You have learned:
+
+✅ CREATE TABLE
+✅ INSERT
+✅ SELECT
+✅ WHERE
+✅ AND / OR
+✅ ORDER BY
+✅ LIKE
+✅ IN
+✅ BETWEEN
+✅ LIMIT
+✅ Aggregate Functions
+✅ GROUP BY / HAVING
+✅ PRIMARY KEY / FOREIGN KEY
+✅ JOINS
+✅ Constraints
+✅ Subqueries
+✅ Normalization
+✅ Views
+✅ Indexes
