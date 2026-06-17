@@ -1,1 +1,193 @@
 
+Now let's learn the most powerful part of Window Functions:
+
+PARTITION BY
+
+Think of PARTITION BY as:
+
+"Create groups, then apply the window function separately inside each group."
+
+Why Do We Need PARTITION BY?
+
+Suppose Employee table:
+
+emp_id	name	department	salary
+1	John	HR	50000
+2	Jane	IT	90000
+3	Bob	HR	70000
+4	Alice	IT	80000
+5	Sam	HR	60000
+
+Question:
+
+Rank employees by salary within each department.
+
+Without PARTITION BY
+SELECT
+    name,
+    department,
+    salary,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) AS rn
+FROM Employee;
+
+Output:
+
+name	dept	salary	rn
+Jane	IT	90000	1
+Alice	IT	80000	2
+Bob	HR	70000	3
+Sam	HR	60000	4
+John	HR	50000	5
+
+This ranks everyone together.
+
+With PARTITION BY
+SELECT
+    name,
+    department,
+    salary,
+    ROW_NUMBER() OVER(
+        PARTITION BY department
+        ORDER BY salary DESC
+    ) AS rn
+FROM Employee;
+What Happens?
+
+SQL first creates groups:
+
+HR Group
+---------
+Bob   70000
+Sam   60000
+John  50000
+
+IT Group
+---------
+Jane   90000
+Alice  80000
+
+Then numbering starts again inside each group.
+
+Output
+name	dept	salary	rn
+Bob	HR	70000	1
+Sam	HR	60000	2
+John	HR	50000	3
+Jane	IT	90000	1
+Alice	IT	80000	2
+
+Notice:
+
+HR numbering:
+1,2,3
+
+IT numbering:
+1,2
+
+The count restarts.
+
+Visual Understanding
+PARTITION BY department
+
+HR
+----
+1 Bob
+2 Sam
+3 John
+
+IT
+----
+1 Jane
+2 Alice
+Using RANK() with PARTITION BY
+SELECT
+    name,
+    department,
+    salary,
+    RANK() OVER(
+        PARTITION BY department
+        ORDER BY salary DESC
+    ) AS rank_num
+FROM Employee;
+
+Same concept, but uses ranking rules.
+
+Real Interview Question
+Find the highest paid employee in each department.
+SELECT *
+FROM (
+    SELECT
+        name,
+        department,
+        salary,
+        ROW_NUMBER() OVER(
+            PARTITION BY department
+            ORDER BY salary DESC
+        ) AS rn
+    FROM Employee
+) t
+WHERE rn = 1;
+Output
+name	dept	salary
+Bob	HR	70000
+Jane	IT	90000
+
+This is a very common interview question.
+
+Difference Between GROUP BY and PARTITION BY
+GROUP BY	PARTITION BY
+Reduces rows	Keeps all rows
+Creates groups	Creates windows
+Used with SUM, AVG, COUNT	Used with window functions
+Example
+GROUP BY
+SELECT department, AVG(salary)
+FROM Employee
+GROUP BY department;
+
+Output:
+
+dept	avg_salary
+HR	60000
+IT	85000
+
+Only 2 rows.
+
+PARTITION BY
+AVG(salary) OVER(PARTITION BY department)
+
+Output:
+
+name	dept	avg_salary
+John	HR	60000
+Bob	HR	60000
+Sam	HR	60000
+Jane	IT	85000
+Alice	IT	85000
+
+All rows remain.
+
+Today's Key Concept
+GROUP BY
+    ↓
+Collapses rows
+
+PARTITION BY
+    ↓
+Keeps rows and calculates within groups
+Practice
+
+Using:
+
+name	dept	salary
+A	HR	50000
+B	HR	60000
+C	IT	90000
+D	IT	70000
+
+What will be the ROW_NUMBER() values for:
+
+ROW_NUMBER() OVER(
+    PARTITION BY dept
+    ORDER BY salary DESC
+)
