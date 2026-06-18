@@ -1,0 +1,258 @@
+Today we'll learn:
+
+UNION and UNION ALL
+
+These are used to combine results from multiple SELECT queries.
+
+Why Do We Need UNION?
+
+Suppose we have two tables.
+
+Employees_2024
+emp_id	name
+1	John
+2	Jane
+Employees_2025
+emp_id	name
+3	Bob
+4	Alice
+
+Now we want:
+
+John
+Jane
+Bob
+Alice
+
+from both tables together.
+
+UNION
+
+Combines results and removes duplicates.
+
+Syntax
+SELECT column_name
+FROM table1
+
+UNION
+
+SELECT column_name
+FROM table2;
+Example
+SELECT name
+FROM Employees_2024
+
+UNION
+
+SELECT name
+FROM Employees_2025;
+Output
+name
+John
+Jane
+Bob
+Alice
+Important Rule
+
+Both SELECT statements must have:
+
+✅ Same number of columns
+
+✅ Compatible data types
+
+Correct
+SELECT name
+FROM Table1
+
+UNION
+
+SELECT name
+FROM Table2;
+Wrong
+SELECT name, salary
+FROM Table1
+
+UNION
+
+SELECT name
+FROM Table2;
+
+❌ Different number of columns.
+
+Understanding Duplicate Removal
+
+Suppose:
+
+Table A
+name
+John
+Jane
+Table B
+name
+Jane
+Bob
+
+Query:
+
+SELECT name FROM A
+
+UNION
+
+SELECT name FROM B;
+Output
+name
+John
+Jane
+Bob
+
+Notice:
+
+Jane appears only once
+
+because UNION removes duplicates.
+
+UNION ALL
+
+Now let's see the difference.
+
+Syntax
+SELECT column_name
+FROM table1
+
+UNION ALL
+
+SELECT column_name
+FROM table2;
+Example
+SELECT name FROM A
+
+UNION ALL
+
+SELECT name FROM B;
+Output
+name
+John
+Jane
+Jane
+Bob
+
+Notice:
+
+Jane appears twice
+
+because UNION ALL keeps duplicates.
+
+Easy Comparison
+Feature	UNION	UNION ALL
+Combines results	✅	✅
+Removes duplicates	✅	❌
+Faster	❌	✅
+Why is UNION ALL Faster?
+UNION
+  ↓
+Combine
+  ↓
+Check duplicates
+  ↓
+Remove duplicates
+
+Extra work.
+
+UNION ALL
+  ↓
+Combine
+  ↓
+Done
+
+No duplicate checking.
+
+Real Interview Question
+Difference Between UNION and UNION ALL?
+
+UNION
+
+Removes duplicates.
+
+UNION ALL
+
+Keeps duplicates.
+Faster.
+Example with Salaries
+SELECT salary
+FROM Employee
+
+UNION
+
+SELECT salary
+FROM Manager;
+
+Returns unique salaries.
+
+SELECT salary
+FROM Employee
+
+UNION ALL
+
+SELECT salary
+FROM Manager;
+
+Returns all salaries including duplicates.
+
+Visual Summary
+UNION
+-------
+A
+B
+B
+C
+
+↓
+
+A
+B
+C
+UNION ALL
+-----------
+A
+B
+B
+C
+
+↓
+
+A
+B
+B
+C
+Practice
+
+Suppose:
+
+Table A
+name
+John
+Jane
+Table B
+name
+Jane
+Bob
+
+What will be the output of:
+
+Query 1
+SELECT name FROM A
+UNION
+SELECT name FROM B;
+Query 2
+SELECT name FROM A
+UNION ALL
+SELECT name FROM B;
+Today's Concepts
+
+✅ UNION
+
+✅ UNION ALL
+
+✅ Duplicate removal
+
+✅ Combining result sets
