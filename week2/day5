@@ -1,0 +1,387 @@
+Excellent! 🚀
+
+Now let's learn a very important SQL concept used in interviews and real projects:
+
+CTE (Common Table Expression)
+
+A CTE is a temporary result set that exists only for the duration of a query.
+
+Think of it as:
+
+Create Temporary Table
+          ↓
+Use it in Main Query
+Why Do We Need CTEs?
+
+Suppose you write:
+
+SELECT *
+FROM (
+    SELECT
+        name,
+        salary,
+        ROW_NUMBER() OVER(
+            ORDER BY salary DESC
+        ) AS rn
+    FROM Employee
+) t
+WHERE rn <= 3;
+
+This works, but it becomes hard to read.
+
+CTE makes it cleaner.
+
+Basic Syntax
+WITH cte_name AS
+(
+    SELECT ...
+)
+SELECT *
+FROM cte_name;
+First Example
+
+Question:
+
+Show all employees using a CTE.
+
+WITH EmployeeData AS
+(
+    SELECT *
+    FROM Employee
+)
+SELECT *
+FROM EmployeeData;
+Understanding
+WITH EmployeeData
+        ↓
+Temporary table created
+        ↓
+Main query uses it
+Real Example – Top 3 Salaries
+
+Without CTE:
+
+SELECT *
+FROM (
+    SELECT
+        name,
+        salary,
+        ROW_NUMBER() OVER(
+            ORDER BY salary DESC
+        ) AS rn
+    FROM Employee
+) t
+WHERE rn <= 3;
+Same Query Using CTE
+WITH RankedEmployees AS
+(
+    SELECT
+        name,
+        salary,
+        ROW_NUMBER() OVER(
+            ORDER BY salary DESC
+        ) AS rn
+    FROM Employee
+)
+SELECT *
+FROM RankedEmployees
+WHERE rn <= 3;
+Why Is This Better?
+Step 1:
+Create RankedEmployees
+
+Step 2:
+Filter Top 3
+
+Much easier to read.
+
+Example Output
+name	salary	rn
+Bob	80000	1
+Jane	60000	2
+John	50000	3
+CTE + Aggregate Functions
+
+Question:
+
+Find departments whose average salary is greater than 60000.
+
+WITH DeptAvg AS
+(
+    SELECT
+        department,
+        AVG(salary) AS avg_salary
+    FROM Employee
+    GROUP BY department
+)
+SELECT *
+FROM DeptAvg
+WHERE avg_salary > 60000;
+Visual Understanding
+Employee Table
+      ↓
+GROUP BY department
+      ↓
+DeptAvg (CTE)
+      ↓
+Apply Filter
+Interview Question
+Difference Between CTE and View?
+CTE	View
+Temporary	Permanent
+Exists for one query	Stored in database
+Created using WITH	Created using CREATE VIEW
+Important Benefits of CTE
+
+✅ Improves readability
+
+✅ Breaks complex queries into steps
+
+✅ Useful with Window Functions
+
+✅ Frequently used in interviews
+
+Most Common Pattern
+WITH Temp AS
+(
+    SELECT ...
+)
+SELECT *
+FROM Temp;
+
+Remember this pattern.
+
+Practice
+
+Suppose:
+
+name	salary
+A	50000
+B	70000
+C	90000
+
+Write a CTE that:
+
+Creates a temporary table containing all employees.
+Shows employees whose salary is greater than 60000.
+What We've Learned Recently
+
+✅ Window Functions
+
+ROW_NUMBER()
+RANK()
+DENSE_RANK()
+
+✅ PARTITION BY
+
+✅ CTE (WITH)
+
+Next Topic
+
+We'll learn CASE WHEN (SQL's version of if-else statements).
+
+This is used everywhere in:
+
+Reports
+Dashboards
+Data Analysis
+Interview questions
+
+and is one of the most practical SQL concepts. 🚀
+
+next
+
+Excellent! 🚀
+
+Now let's learn one of the most practical SQL concepts:
+
+CASE WHEN
+
+Think of CASE WHEN as SQL's version of:
+
+if
+else if
+else
+
+It allows us to create conditions inside queries.
+
+Why Do We Need CASE WHEN?
+
+Suppose Employee table:
+
+name	salary
+John	50000
+Jane	70000
+Bob	90000
+
+Question:
+
+Categorize employees as High Salary or Low Salary.
+
+Basic Syntax
+CASE
+    WHEN condition THEN result
+    WHEN condition THEN result
+    ELSE result
+END
+First Example
+SELECT
+    name,
+    salary,
+    CASE
+        WHEN salary >= 70000 THEN 'High Salary'
+        ELSE 'Low Salary'
+    END AS salary_category
+FROM Employee;
+Output
+name	salary	salary_category
+John	50000	Low Salary
+Jane	70000	High Salary
+Bob	90000	High Salary
+How SQL Executes
+
+For John:
+
+salary >= 70000 ?
+      ↓
+No
+      ↓
+ELSE
+      ↓
+Low Salary
+Multiple Conditions
+
+Question:
+
+Classify salaries into High, Medium, Low.
+
+SELECT
+    name,
+    salary,
+    CASE
+        WHEN salary >= 80000 THEN 'High'
+        WHEN salary >= 60000 THEN 'Medium'
+        ELSE 'Low'
+    END AS salary_level
+FROM Employee;
+Output
+name	salary	salary_level
+John	50000	Low
+Jane	70000	Medium
+Bob	90000	High
+Important Rule
+
+SQL checks conditions from top to bottom.
+
+For Bob:
+
+salary = 90000
+
+90000 >= 80000 ?
+     ↓
+TRUE
+     ↓
+High
+
+SQL stops checking further conditions.
+
+CASE in ORDER BY
+
+Question:
+
+Show High salary employees first.
+
+SELECT *
+FROM Employee
+ORDER BY
+CASE
+    WHEN salary >= 70000 THEN 1
+    ELSE 2
+END;
+CASE with Aggregate Functions
+
+Question:
+
+Count high salary employees.
+
+SELECT
+COUNT(
+    CASE
+        WHEN salary >= 70000 THEN 1
+    END
+) AS high_salary_count
+FROM Employee;
+Output
+high_salary_count
+2
+Real-World Example
+
+Student Marks:
+
+student	marks
+A	95
+B	75
+C	55
+
+Query:
+
+SELECT
+    student,
+    marks,
+    CASE
+        WHEN marks >= 90 THEN 'A Grade'
+        WHEN marks >= 70 THEN 'B Grade'
+        WHEN marks >= 50 THEN 'C Grade'
+        ELSE 'Fail'
+    END AS grade
+FROM Students;
+Visual Summary
+CASE
+ ├─ WHEN condition → result
+ ├─ WHEN condition → result
+ └─ ELSE result
+Interview Question
+Difference Between WHERE and CASE?
+
+WHERE
+
+Filters rows
+
+CASE
+
+Creates values based on conditions
+
+Example:
+
+WHERE salary > 50000
+
+removes rows.
+
+But:
+
+CASE WHEN salary > 50000
+
+keeps rows and creates labels.
+
+Practice
+
+Using:
+
+name	salary
+A	40000
+B	70000
+C	95000
+
+Write a CASE expression that returns:
+
+salary >= 90000 → Excellent
+salary >= 60000 → Good
+otherwise       → Average
+Today's Concepts
+
+✅ CASE
+✅ WHEN
+✅ THEN
+✅ ELSE
+✅ END
+✅ Conditional logic in SQL
